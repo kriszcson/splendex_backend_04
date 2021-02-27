@@ -42,5 +42,4 @@ export class ProductsService {
         return await this.productsModel.findByIdAndDelete(id)
             || new NotFoundException(404, 'Product not found!');
     }
-
 }

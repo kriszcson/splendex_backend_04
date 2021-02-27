@@ -1,4 +1,37 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from '@nestjs/common';
+import * as mongoose from 'mongoose';
+
+import { CreateStockDTO } from './dto/create-stock.dto';
+import { StockService } from './stock.service';
 
 @Controller('stock')
-export class StockController {}
+export class StockController {
+
+    constructor(private readonly stockService: StockService) { }
+
+    @Get()
+    async getAll() {
+        return await this.stockService.getAll();
+    }
+
+    @Get(':id')
+    async getById(@Param('id') id: mongoose.Schema.Types.ObjectId) {
+        return await this.stockService.getById(id);
+    }
+
+    @Post()
+    async insertOne(@Body() createStockDTO: CreateStockDTO) {
+        return await this.stockService.insertOne(createStockDTO);
+    }
+
+    @Put(':id')
+    async updateById(@Param('id') id: mongoose.Schema.Types.ObjectId, createStockDTO: CreateStockDTO) {
+        return await this.stockService.updateById(id, createStockDTO);
+    }
+
+    @Delete('')
+    async deleteById(@Param('id') id: mongoose.Schema.Types.ObjectId) {
+        return this.stockService.deleteById(id);
+    }
+
+}
