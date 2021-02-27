@@ -8,10 +8,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ProductsModule } from './products/products.module';
+import { StockModule } from './stock/stock.module';
+import { WarehouseModule } from './warehouse/warehouse.module';
 
 @Module({
   imports: [UserModule, AuthModule,
-    ConfigModule.forRoot(), MongooseModule.forRoot(process.env.DATABASE_URL, { useNewUrlParser: true }), ProductsModule
+    ConfigModule.forRoot(), MongooseModule.forRoot(process.env.DATABASE_URL, { useNewUrlParser: true }), ProductsModule, StockModule, WarehouseModule
   ],
   controllers: [AppController],
   providers: [AppService],
