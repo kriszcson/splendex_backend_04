@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from 'bcrypt';
-import { promises } from "fs";
 
 import { Model } from "mongoose";
+import { UserDTO } from "./dto/user.dto";
 import { User } from "./user.model";
 
 
@@ -26,14 +26,14 @@ export class UserService {
         return user;
     }
 
-    async createUser(email: string, password: string) {
-        const haveUser = await this.findByEmail(email);
+    async createUser(userDTO: UserDTO) {
+        const haveUser = await this.findByEmail(userDTO.email);
         if (haveUser) {
             return null;
         } else {
             const user = new this.userModel({
-                email: email,
-                password: await this.hashPassword(password)
+                email: userDTO.email,
+                password: await this.hashPassword(userDTO.password)
             })
             await user.save();
             return user;
