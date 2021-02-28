@@ -46,19 +46,4 @@ export class StockController {
     async getStockByProductId(@Param('id') id: mongoose.Schema.Types.ObjectId) {
         return await this.stockService.getStockByProductId(id);
     }
-
-
-
-    @Get('warehouses/:id')
-    async getStockByWarehouseId(@Param('id') id: mongoose.Schema.Types.ObjectId) {
-        return await this.stockService.getStockByWarehouseId(id);
-    }
-
-    @Get('warehouses/:id/:productId')
-    async getStockByWarehouseAndProductId(
-        @Param('id') id: mongoose.Schema.Types.ObjectId,
-        @Param('productId') productId: mongoose.Schema.Types.ObjectId
-    ) {
-        return await this.stockService.getStockByWarehouseAndProductId(id, productId);
-    }
 }

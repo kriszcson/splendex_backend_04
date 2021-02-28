@@ -7,14 +7,19 @@ import { WarehouseSchema } from './warehouse.model';
 
 import { ProductsModule } from 'src/products/products.module';
 import { ProductsSchema } from '../products/products.model';
+import { StockModule } from 'src/stock/stock.module';
+import { StockSchema } from 'src/stock/stock.model';
 
 
 @Module({
-    imports: [ProductsModule, MongooseModule.forFeature([{
-        name: 'Warehouses', schema: WarehouseSchema
-    }]), MongooseModule.forFeature([{
-        name: 'Products', schema: ProductsSchema
-    }])],
+    imports: [ProductsModule, StockModule,
+        MongooseModule.forFeature([{
+            name: 'Warehouses', schema: WarehouseSchema
+        }]), MongooseModule.forFeature([{
+            name: 'Products', schema: ProductsSchema
+        }]), MongooseModule.forFeature([{
+            name: 'Stock', schema: StockSchema
+        }])],
     providers: [WarehouseService],
     controllers: [WarehouseController]
 })

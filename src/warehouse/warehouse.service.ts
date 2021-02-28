@@ -7,14 +7,15 @@ import { CreateWarehouseDTO } from "./dto/create-warehouse.dto";
 import { UpdateWarehouseDTO } from "./dto/update-warehouse.dto";
 import { Warehouse } from './warehouse.model';
 
-import { Product } from "../products/products.model";
+import { ProductStockDTO } from "src/stock/dto/product-stock.dto";
+import { StockService } from "src/stock/stock.service";
 
 @Injectable()
 export class WarehouseService {
 
     constructor(
         @InjectModel('Warehouses') private readonly warehouseModel: Model<Warehouse>,
-        @InjectModel('Products') private readonly productsModel: Model<Product>
+        private readonly stockService: StockService
     ) { }
 
     async getAll(): Promise<Warehouse[]> {
@@ -47,4 +48,53 @@ export class WarehouseService {
             || new NotFoundException(404, 'Product not found!');
     }
 
+
+
+
+    async getStockByWarehouseId(id: mongoose.Schema.Types.ObjectId): Promise<Object | NotFoundException> {
+        let countSum = 0;
+        let stocksOfProduct: Object[] = [];
+        for (let stockOfProduct of await this.stockService.getStockOfProducts()) {
+            if (stockOfProduct.warehouse._id == id) {
+                stocksOfProduct.push({
+                    stock_id: stockOfProduct._id,
+                    product: stockOfProduct.product,
+                    count: stockOfProduct.count,
+                });
+                countSum += stockOfProduct.count;
+            }
+        }
+        if (stocksOfProduct.length > 0) {
+            return {
+                countSum: countSum,
+                products: stocksOfProduct
+            }
+        } else {
+            return new NotFoundException()
+        };
+    }
+
+    async getStockByWarehouseAndProductId(warehouseId: mongoose.Schema.Types.ObjectId, productId: mongoose.Schema.Types.ObjectId): Promise<Object | NotFoundException> {
+        let countSum = 0;
+        let stocksOfProduct: Object[] = [];
+        for (let stockOfProduct of await this.stockService.getStockOfProducts()) {
+            if (stockOfProduct.warehouse._id == warehouseId &&
+                stockOfProduct.product._id == productId) {
+                stocksOfProduct.push({
+                    stock_id: stockOfProduct._id,
+                    product: stockOfProduct.product,
+                    count: stockOfProduct.count,
+                });
+                countSum += stockOfProduct.count;
+            }
+        }
+        if (stocksOfProduct.length > 0) {
+            return {
+                countSum: countSum,
+                products: stocksOfProduct
+            }
+        } else {
+            return new NotFoundException()
+        };
+    }
 }

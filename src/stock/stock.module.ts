@@ -16,6 +16,7 @@ import { ProductsSchema } from 'src/products/products.model';
   }])
   ],
   controllers: [StockController],
-  providers: [StockService]
+  providers: [StockService],
+  exports: [StockService]
 })
 export class StockModule { }

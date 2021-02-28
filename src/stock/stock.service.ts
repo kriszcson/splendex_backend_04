@@ -7,6 +7,7 @@ import * as mongoose from 'mongoose';
 import { CreateStockDTO } from './dto/create-stock.dto';
 import { UpdateStockDTO } from './dto/update-stock.dto';
 import { ProductStockDTO } from './dto/product-stock.dto';
+import { count } from 'console';
 
 @Injectable()
 export class StockService {
@@ -75,29 +76,6 @@ export class StockService {
         let stocksOfProduct: ProductStockDTO[] = [];
         for (let stockOfProduct of await this.getStockOfProducts()) {
             if (stockOfProduct.product._id == id) {
-                stocksOfProduct.push(stockOfProduct);
-            }
-        }
-        if (stocksOfProduct.length > 0) return stocksOfProduct;
-        else return new NotFoundException();
-    }
-
-    async getStockByWarehouseId(id: mongoose.Schema.Types.ObjectId): Promise<ProductStockDTO[] | NotFoundException> {
-        let stocksOfProduct: ProductStockDTO[] = [];
-        for (let stockOfProduct of await this.getStockOfProducts()) {
-            if (stockOfProduct.warehouse._id == id) {
-                stocksOfProduct.push(stockOfProduct);
-            }
-        }
-        if (stocksOfProduct.length > 0) return stocksOfProduct;
-        else return new NotFoundException();
-    }
-
-    async getStockByWarehouseAndProductId(warehouseId: mongoose.Schema.Types.ObjectId, productId): Promise<ProductStockDTO[] | NotFoundException> {
-        let stocksOfProduct: ProductStockDTO[] = [];
-        for (let stockOfProduct of await this.getStockOfProducts()) {
-            if (stockOfProduct.warehouse._id == warehouseId &&
-                stockOfProduct.product._id == productId) {
                 stocksOfProduct.push(stockOfProduct);
             }
         }
