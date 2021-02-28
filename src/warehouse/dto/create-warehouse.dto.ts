@@ -4,6 +4,4 @@ export class CreateWarehouseDTO {
 
     @IsNotEmpty()
     address: string;
-    @IsNotEmpty()
-    warehouse_number: number;
 }

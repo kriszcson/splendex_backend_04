@@ -31,7 +31,34 @@ export class StockController {
 
     @Delete('')
     async deleteById(@Param('id') id: mongoose.Schema.Types.ObjectId) {
-        return this.stockService.deleteById(id);
+        return await this.stockService.deleteById(id);
     }
 
+
+
+
+    @Get('products')
+    async getStockOfProducts() {
+        return await this.stockService.getStockOfProducts();
+    }
+
+    @Get('products/:id')
+    async getStockByProductId(@Param('id') id: mongoose.Schema.Types.ObjectId) {
+        return await this.stockService.getStockByProductId(id);
+    }
+
+
+
+    @Get('warehouses/:id')
+    async getStockByWarehouseId(@Param('id') id: mongoose.Schema.Types.ObjectId) {
+        return await this.stockService.getStockByWarehouseId(id);
+    }
+
+    @Get('warehouses/:id/:productId')
+    async getStockByWarehouseAndProductId(
+        @Param('id') id: mongoose.Schema.Types.ObjectId,
+        @Param('productId') productId: mongoose.Schema.Types.ObjectId
+    ) {
+        return await this.stockService.getStockByWarehouseAndProductId(id, productId);
+    }
 }
