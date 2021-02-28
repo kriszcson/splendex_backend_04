@@ -7,7 +7,6 @@ import * as mongoose from 'mongoose';
 import { CreateStockDTO } from './dto/create-stock.dto';
 import { UpdateStockDTO } from './dto/update-stock.dto';
 import { ProductStockDTO } from './dto/product-stock.dto';
-import { count } from 'console';
 
 @Injectable()
 export class StockService {

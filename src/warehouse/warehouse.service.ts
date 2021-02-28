@@ -7,7 +7,6 @@ import { CreateWarehouseDTO } from "./dto/create-warehouse.dto";
 import { UpdateWarehouseDTO } from "./dto/update-warehouse.dto";
 import { Warehouse } from './warehouse.model';
 
-import { ProductStockDTO } from "src/stock/dto/product-stock.dto";
 import { StockService } from "src/stock/stock.service";
 
 @Injectable()
