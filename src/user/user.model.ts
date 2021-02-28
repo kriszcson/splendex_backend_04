@@ -6,7 +6,7 @@ export const UserSchema = new mongoose.Schema({
 })
 
 export interface User extends mongoose.Document {
-    _id: string
-    email: string;
-    password: string;
+    readonly _id: string
+    readonly email: string;
+    readonly password: string;
 }
