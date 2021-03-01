@@ -7,7 +7,7 @@ import { UpdateWarehouseDTO } from './dto/update-warehouse.dto';
 import { WarehouseService } from './warehouse.service';
 
 
-@ApiTags('stock')
+@ApiTags('warehouse')
 @Controller('warehouse')
 export class WarehouseController {
 
