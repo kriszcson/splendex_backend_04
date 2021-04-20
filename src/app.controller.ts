@@ -1,8 +1,9 @@
 import { Controller, Get, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { UserDTO } from './user/dto/user.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { LocalAuthGuard } from './auth/local-auth.guard';
+import { Public } from './user/role/roles.decorator';
 
 
 @ApiTags('authentication')
@@ -11,28 +12,26 @@ export class AppController {
   constructor(private authService: AuthService) { }
 
 
-  @UseGuards(AuthGuard('local'))
-  @ApiOkResponse({ description: 'Authorization successful.' })
-  @ApiForbiddenResponse({ description: 'Unathorized.' })
+  @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('auth/login')
-  async login(@Body() userDTO: UserDTO
+  async login(
+    @Body() @Request() req
   ) {
-    return await this.authService.login(userDTO);
+    return await this.authService.login(req.email, req.password);
   }
 
-  @ApiOkResponse({ description: 'Authorization successful.' })
-  @ApiForbiddenResponse({ description: 'Unathorized.' })
+  @Public()
   @Post('auth/signup')
   async signUp(
-    @Body() userDTO: UserDTO
+    @Body() @Request() req
   ) {
-    return await this.authService.signUp(userDTO);
+    return await this.authService.signUp(req.email, req.password, [1]);
   }
 
-  @ApiOkResponse({ description: 'Sussessfully returned data.' })
-  @ApiForbiddenResponse({ description: 'Forbidden.' })
-  @Get('')
-  welcome() {
-    return { message: 'Welcome to my Stock API!' };
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  async getProfile(@Request() req) {
+    return await req.user;
   }
 }

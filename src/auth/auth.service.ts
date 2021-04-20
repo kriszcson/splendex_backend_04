@@ -15,18 +15,18 @@ export class AuthService {
         }
     }
 
-
-    async login(user: UserDTO): Promise<Object> {
-        const payload = { email: user.email, sub: user._id };
+    async login(email: string, password: string): Promise<Object> {
+        const user = await this.userService.findByEmail(email);
+        const payload = { email: email, sub: user._id, roles: user.roles };
         return {
             access_token: this.jwtService.sign(payload),
         };
     }
 
-    async signUp(userDTO: UserDTO): Promise<Object> {
-        const newUser: UserDTO = await this.userService.createUser(userDTO);
+    async signUp(email: string, password: string, roles: number[]): Promise<Object> {
+        const newUser: UserDTO = await this.userService.createUser(email, password, roles);
         if (newUser) {
-            return this.login(newUser);
+            return this.login(newUser.email, newUser.password);
         }
         else {
             return { message: 'Email exists!' }

@@ -1,8 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Post, Put, SetMetadata, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import * as mongoose from 'mongoose';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Role } from 'src/user/role/role.enum';
+import { Roles } from 'src/user/role/roles.decorator';
+import { RolesGuard } from 'src/user/role/roles.guard';
 
 import { CreateProductDTO } from './dto/create-product.dto';
 import { UpdateProductDTO } from './dto/update-product.dto';
@@ -15,7 +19,9 @@ export class ProductsController {
     constructor(private readonly productService: ProductsService) { }
 
 
-    @UseGuards(JwtAuthGuard)
+    @SetMetadata('roles', ['admin'])
+    @UseGuards(RolesGuard, AuthGuard('jwt'))
+    @ApiBearerAuth()
     @ApiOkResponse({ description: 'The list of products successfully returned.' })
     @ApiForbiddenResponse({ description: 'Forbidden.' })
     @Get()
@@ -25,12 +31,14 @@ export class ProductsController {
 
     @UseGuards(JwtAuthGuard)
     @ApiOkResponse({ description: 'The product successfully returned.' })
-    @ApiForbiddenResponse({ description: 'Forbidden.' })
+    @ApiUnauthorizedResponse({ description: 'Forbidden.' })
     @Get(':id')
     async getById(@Param('id') id: mongoose.Schema.Types.ObjectId) {
         return this.productService.getById(id);
     }
 
+    @SetMetadata('roles', ['admin'])
+    @Roles(Role.Admin)
     @UseGuards(JwtAuthGuard)
     @ApiOkResponse({ description: 'The product successfully inserted.' })
     @ApiForbiddenResponse({ description: 'Forbidden.' })

@@ -17,7 +17,8 @@ export class UserService {
         return allUsers.map((user) => ({
             _id: user.id,
             email: user.email,
-            password: user.password
+            password: user.password,
+            roles: user.roles
         }))
     }
 
@@ -26,14 +27,15 @@ export class UserService {
         return user;
     }
 
-    async createUser(userDTO: UserDTO) {
-        const haveUser = await this.findByEmail(userDTO.email);
+    async createUser(email: string, password: string, roles: number[]) {
+        const haveUser = await this.findByEmail(email);
         if (haveUser) {
             return null;
         } else {
             const user = new this.userModel({
-                email: userDTO.email,
-                password: await this.hashPassword(userDTO.password)
+                email: email,
+                password: await this.hashPassword(password),
+                roles: roles
             })
             await user.save();
             return user;

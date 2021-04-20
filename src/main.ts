@@ -8,6 +8,10 @@ async function bootstrap() {
     .setTitle('Stock API')
     .setDescription('Handling stocks of products')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'Token' },
+      'access-token',
+    )
     .build();
   const doc = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, doc);

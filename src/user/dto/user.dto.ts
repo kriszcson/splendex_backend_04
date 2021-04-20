@@ -1,9 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail } from "class-validator";
 import * as mongoose from "mongoose";
+import { Role } from "../role/role.enum";
 
 export class UserDTO {
 
+    constructor(email: string, password: string) {
+        this.email = email;
+        this.password = password
+    }
     readonly _id: mongoose.Schema.Types.ObjectId;
 
     @IsEmail()
@@ -22,4 +27,6 @@ export class UserDTO {
         example: '1'
     })
     readonly password: string;
+
+    readonly roles: Role[];
 }
