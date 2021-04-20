@@ -19,8 +19,8 @@ export class ProductsController {
     constructor(private readonly productService: ProductsService) { }
 
 
-    @SetMetadata('roles', ['admin'])
     @UseGuards(RolesGuard, AuthGuard('jwt'))
+    @Roles(Role.User)
     @ApiBearerAuth()
     @ApiOkResponse({ description: 'The list of products successfully returned.' })
     @ApiForbiddenResponse({ description: 'Forbidden.' })
@@ -29,7 +29,9 @@ export class ProductsController {
         return this.productService.getAll();
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(RolesGuard, AuthGuard('jwt'))
+    @Roles(Role.User)
+    @ApiBearerAuth()
     @ApiOkResponse({ description: 'The product successfully returned.' })
     @ApiUnauthorizedResponse({ description: 'Forbidden.' })
     @Get(':id')
@@ -37,9 +39,9 @@ export class ProductsController {
         return this.productService.getById(id);
     }
 
-    @SetMetadata('roles', ['admin'])
+    @UseGuards(RolesGuard, AuthGuard('jwt'))
     @Roles(Role.Admin)
-    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ description: 'The product successfully inserted.' })
     @ApiForbiddenResponse({ description: 'Forbidden.' })
     @Post()
@@ -49,7 +51,9 @@ export class ProductsController {
         return await this.productService.insertOne(product);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(RolesGuard, AuthGuard('jwt'))
+    @Roles(Role.Admin)
+    @ApiBearerAuth()
     @ApiOkResponse({ description: 'The list of products successfully updated.' })
     @ApiForbiddenResponse({ description: 'Forbidden.' })
     @Put(':id')
@@ -61,7 +65,9 @@ export class ProductsController {
         return updatedProduct;
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(RolesGuard, AuthGuard('jwt'))
+    @Roles(Role.Admin)
+    @ApiBearerAuth()
     @ApiOkResponse({ description: 'The list of products successfully deleted.' })
     @ApiForbiddenResponse({ description: 'Forbidden.' })
     @Delete(':id')
